@@ -1,0 +1,33 @@
+import requests
+import json
+import pandas as pd
+
+url='https://comtrade.un.org/api/get?max=5000000&head=H&fmt=json&type=C&freq=A&rg=2&px=HS&ps=2018,2015&r=32&p=ALL&cc=01' 
+
+#ref
+#type= C=commodities, S=services
+#freq= A=annual, M=monthly
+#rg=trade flow  1=import, 2=export, 3=re-export, 4=re-import, or all
+#px= classification
+#ps = period
+#r=reporter, all or code     -> not accept all to all
+#PARTNER= ALL or code  
+#cc= commodity code , TOTAL Total trade between reporter and partner, no detail breakdown. AG1, AG2, AG3, AG4, AG5, AG6 (aggregated level), ALL: all codes
+
+
+data1=requests.get(url)
+print(data1.status_code)
+print(type(data1))
+
+data2=json.loads(data1.text)
+
+final=(data2["dataset"])
+
+a1=pd.DataFrame(final)
+a1
+
+from google.colab import drive
+drive.mount('drive')
+
+a1.to_csv('a1.csv', index=False) 
+!cp a1.csv "drive/My Drive/foldername"
